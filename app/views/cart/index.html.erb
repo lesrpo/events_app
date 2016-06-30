@@ -1,0 +1,20 @@
+<h1>Your cart</h1>
+<%= link_to 'Empty your Cart', cart_clear_path %>
+<br><br><br><br>
+
+<% total = 0 %>
+<% @cart.each do |id, quantity| %>
+	<% event = Event.find_by_id(id) %>
+	<ul>
+		<li>
+			<%= link_to event.title, event %>
+			<p><%= event.description %></p>
+			<p><%= number_to_currency(event.price, :unit => '$') %></p>
+			<p>Quantity <%=  quantity %></p>
+		</li>
+	</ul>
+	
+<% total += quantity * event.price %>
+<% end %>
+
+	<strong>TOTAL: <%= number_to_currency(total, :unit => '$') %></strong>
