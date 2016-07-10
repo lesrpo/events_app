@@ -26,6 +26,17 @@ class CartController < ApplicationController
   		redirect_to :action => :index
   	end
 
+    def deleteItem
+      id = params[:id]
+      if session[:cart] then
+        cart = session[:cart]
+        if cart[id] then
+          cart.delete(id)
+        end
+      end
+      redirect_to cart_path
+    end
+
 	def index
 		#if there is a cart, pass it to the page for display, else pass an empty value
 		if session[:cart] then

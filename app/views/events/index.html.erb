@@ -1,6 +1,10 @@
-<p id="notice"><%= notice %></p>
+<h1>Próximos Eventos</h1>
 
-<h1>Listing Events</h1>
+<% if current_user.try(:admin?) %>   
+  <p><%= link_to 'Nuevo Evento', new_event_path, :class => 'pull-right btn btn-primary' %></p>
+
+<% end %>
+<br><br><br>
 
 <div class="events">
   <div class="row">
@@ -10,24 +14,23 @@
           <img src="<%= event.img_url %>" alt="<%= event.title %>">
           <div class="caption">
             <h3><%= event.title %></h3>
-            <p><%= event.description %></p>
+            <p class="description"><%= truncate(event.description, length: 20) %></p>
             <p><%= event.location %></p>
-            <p><%= event.date %></p>
-            <p><%= event.price %></p>
+            <p><%= l(event.date, :format => :full )%></p>
+            <p><%= number_to_currency(event.price, :unit => '$', precision: 0) %></p>
             <p>
-            <a href="/cart/<%= event.id %>" class="btn btn-primary" role="button">Add to Cart <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a> 
-            </p>      
-            <p><%= link_to 'Show', event %></p>
-            <p><%= link_to 'Edit', edit_event_path(event) %></p>
-            <p><%= link_to 'Destroy', event, method: :delete, data: { confirm: 'Are you sure?' } %></p>
+            <a href="/cart/<%= event.id %>" class="btn btn-primary" role="button">Añadir al carrito <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a> 
+            </p>
+            <% if current_user.try(:admin?) %>    
+              <p class="actions">
+                <span><%= link_to 'Show', event %></span>
+                <span><%= link_to 'Edit', edit_event_path(event) %></span>
+                <span><%= link_to 'Destroy', event, method: :delete, data: { confirm: 'Are you sure?' } %></span>
+              </p>
+            <% end %>
           </div>
         </div>
       </div>    
     <% end %>
   </div>
 </div>
-
-
-<br>
-
-<%= link_to 'New Event', new_event_path %>

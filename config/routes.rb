@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   get '/cart/clear' => 'cart#clearCart'
 
+  get '/cart/delete/:id' => 'cart#deleteItem', as: 'delete_event_cart'
+
   get '/cart/:id' => 'cart#add'
 
   root 'events#index'

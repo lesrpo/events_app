@@ -1,20 +1,35 @@
-<h1>Your cart</h1>
-<%= link_to 'Empty your Cart', cart_clear_path %>
+<h1>Tu carrito</h1>
+<%= link_to 'Borrar todos los productos', cart_clear_path %>
 <br><br><br><br>
 
 <% total = 0 %>
-<% @cart.each do |id, quantity| %>
-	<% event = Event.find_by_id(id) %>
-	<ul>
-		<li>
-			<%= link_to event.title, event %>
-			<p><%= event.description %></p>
-			<p><%= number_to_currency(event.price, :unit => '$') %></p>
-			<p>Quantity <%=  quantity %></p>
-		</li>
-	</ul>
-	
-<% total += quantity * event.price %>
-<% end %>
+<div class="table-responsive">
+	<table class="table hover cart">
+		<% @cart.each do |id, quantity| %>
+			<% event = Event.find_by_id(id) %>
+			<tr>
+				<td><a href="<%= event_path(event.id) %>"><img src="<%= event.img_url %>" alt="<%= event.title %>"></a></td>
+				<td><%= link_to event.title, event %></td>
+				<td><%= event.title %></td>
+				<td><%= quantity %></td>
+				<td><%= number_to_currency(event.price, :unit => '$') %></td>
+				<td><%= link_to "Eliminar", delete_event_cart_path(event.id) %></td>
+			</tr>
+			
+		<% total += quantity * event.price %>
+		<% end %>
+		<% if total > 0 then %>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td><strong>TOTAL:</strong></td>
+			<td><strong><%= number_to_currency(total, :unit => '$') %></strong></td>			
+			<td></td>
+		</tr>
+		<% else %>
+			<h3>Tu carrito esta vacio</h3>
+		<% end %>
+	</table>
+</div>
 
-	<strong>TOTAL: <%= number_to_currency(total, :unit => '$') %></strong>
