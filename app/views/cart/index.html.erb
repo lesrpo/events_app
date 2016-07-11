@@ -19,17 +19,41 @@
 		<% total += quantity * event.price %>
 		<% end %>
 		<% if total > 0 then %>
-		<tr>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td><strong>TOTAL:</strong></td>
-			<td><strong><%= number_to_currency(total, :unit => '$') %></strong></td>			
-			<td></td>
-		</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><strong>TOTAL:</strong></td>
+				<td><strong><%= number_to_currency(total, :unit => '$') %></strong></td>			
+				<td></td>
+			</tr>
 		<% else %>
 			<h3>Tu carrito esta vacio</h3>
 		<% end %>
 	</table>
+
+	<div class="actions-cart">
+		<%= link_to "Continua Comprando", events_path, :class => 'btn pull-left' %>
+		<% if current_user then %>
+			<form method="post" action="https://sandbox.gateway.payulatam.com/ppp-web-gateway/">
+			  <input name="merchantId"    type="hidden"  value="508029"   >
+			  <input name="accountId"     type="hidden"  value="<%= current_user.id %>" >
+			  <input name="description"   type="hidden"  value="EventsPayment"  >
+			  <input name="referenceCode" type="hidden"  value="<%= SecureRandom.urlsafe_base64 %>" >
+			  <input name="amount"        type="hidden"  value="<%= total %>"   >
+			  <input name="tax"           type="hidden"  value="0"  >
+			  <input name="taxReturnBase" type="hidden"  value="0" >
+			  <input name="currency"      type="hidden"  value="COP" >
+			  <input name="signature"     type="hidden"  value="ba9ffa71559580175585e45ce70b6c37"  >
+			  <input name="test"          type="hidden"  value="1" >
+			  <input name="buyerEmail"    type="hidden"  value="<%= current_user.email %>" >
+			  <input name="responseUrl"    type="hidden"  value="http://www.test.com/response" >
+			  <input name="confirmationUrl"    type="hidden"  value="http://www.test.com/confirmation" >
+			  <input type="submit" class="btn pull-right btn-primary" value="Pagar">
+			</form>
+		<% else %>
+		    <%= link_to "Pagar", user_session_path, :class => 'btn btn-primary pull-right' %>
+		<% end %>
+	</div>
 </div>
 
